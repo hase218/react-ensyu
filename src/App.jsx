@@ -13,8 +13,9 @@ export default function App() {
                     throw new Error(`HTTPエラー: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data[0].url);
-                setImg(data[0].url);
+                console.log(data[0]?.url);
+                setImg(data[0]?.url);
+                //?.オプショナルチェーン、
             } catch (error) {
                 console.error(error.message);
             }
@@ -29,7 +30,7 @@ export default function App() {
             <div>
                 <main>
                     <p>neko</p>
-                    <img src={img} alt="randomDogs" />
+                    <img class="cats" src={img} alt="randomCats" />
                 </main>
             </div>
             <footer>
