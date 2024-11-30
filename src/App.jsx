@@ -63,12 +63,16 @@ export default function App() {
     const handleSlideRight = () => {
         // alert("画像が右にスライドされました！");
         setGoodCats(prevImg => [...prevImg, catImg]);
-        console.log("good", goodCats)
+        console.log("good", goodCats);
+        setDistanceX(0);
+        setIsDragging(false);
     };
     const handleSlideLeft = () => {
         // alert("左にスライドされた")
         setNotGoodCats(prevImg => [...prevImg, catImg]);
-        console.log("notGood", notGoodCats)
+        console.log("notGood", notGoodCats);
+        setDistanceX(0);
+        setIsDragging(false);
     }
 
     return (
