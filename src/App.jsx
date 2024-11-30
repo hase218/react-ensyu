@@ -6,8 +6,9 @@ import Box from '@mui/material/Box';
 
 export default function App() {
     const [img, setImg] = useState();
-    const [isClicked, setIsClicked] = useState(false);
-
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [distanceX, setDistanceX] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -26,6 +27,38 @@ export default function App() {
         })();
     }, []);
     //空の配列を渡した場合は、最初にコンポーネントがレンダリングされた時の 1 回だけ副作用が起こされます
+
+    // マウスダウンでドラッグ開始
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setStartX(e.clientX);
+    };
+
+    // マウスムーブでスライド距離を更新
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+
+        const currentX = e.clientX;
+        const distance = currentX - startX;
+        setDistanceX(distance);
+
+        if (distance > 50) {  // 50px以上右にスライドしたら
+            handleSlideRight();
+        }
+    };
+
+    // マウスアップでドラッグ終了
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDistanceX(0); // スライド距離をリセット
+    };
+
+    // スライド右に反応したときの処理
+    const handleSlideRight = () => {
+        alert("画像が右にスライドされました！");
+        // ここで別の処理を追加できます（例えば、画像を変更する等）
+    };
+
     return (
         <>
             <header>
@@ -39,7 +72,7 @@ export default function App() {
                             margin: "0 auto",
                             border: "2px solid black",
                             justifyContent: "center",
-                            alignItems: "center", 
+                            alignItems: "center",
                             textAlign: "center",
                         }}>
                         <p>neko</p>
@@ -51,11 +84,13 @@ export default function App() {
                                 overflow: "hidden",
                                 border: "2px solid black",
                                 position: "relative",
-                                display: 'flex',
-                                justifyContent: 'center',  // 横方向の中央揃え
-                                alignItems: 'center',      // 縦方向の中央揃え
                                 textAlign: "center",
-                            }}>
+                            }}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}  // マウスが外に出た時にもドラッグ終了
+                        >
 
                             <img
                                 class="cats"
@@ -65,10 +100,12 @@ export default function App() {
                                     width: "100%",
                                     height: "100%",
                                     objectFit: "contain",
+                                    transition: "transform 0.2s ease-out",
+                                    transform: `translateX(${distanceX}px)`, // スライド位置を反映
                                 }
                                 }
 
-                                
+
                             />
 
                         </Box>
