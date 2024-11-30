@@ -31,7 +31,7 @@ export default function App() {
     // マウスダウンでドラッグ開始
     const handleMouseDown = (e) => {
         setIsDragging(true);
-        setStartX(e.clientX);
+        setStartX(e.clientX); //クリックされたときのx座標を記録
     };
 
     // マウスムーブでスライド距離を更新
@@ -42,8 +42,11 @@ export default function App() {
         const distance = currentX - startX;
         setDistanceX(distance);
 
-        if (distance > 50) {  // 50px以上右にスライドしたら
+        if (distance > 30) {  // 30px以上右にスライドしたら
             handleSlideRight();
+        }
+        if (distance < -30) {  // 30px以上左にスライドしたら
+            handleSlideLeft();
         }
     };
 
@@ -58,6 +61,9 @@ export default function App() {
         alert("画像が右にスライドされました！");
         // ここで別の処理を追加できます（例えば、画像を変更する等）
     };
+    const handleSlideLeft = () => {
+        alert("左にスライドされた")
+    }
 
     return (
         <>
