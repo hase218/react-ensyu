@@ -1,8 +1,23 @@
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect, useState } from "react"
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 
+const theme = createTheme({
+    typography: {
+        htmlFontSize: "10px", // html { font-size: 10px; } の代わり
+        fontFamily: '"Yusei Magic", sans-serif', // フォントファミリー
+    },
+    palette: {
+        background: {
+            default: "white", // 背景色
+        },
+    },
+});
 
 export default function App() {
     const [catImg, setCatImg] = useState();
@@ -11,6 +26,7 @@ export default function App() {
     const [distanceX, setDistanceX] = useState(0);
     const [goodCats, setGoodCats] = useState([]);
     const [notGoodCats, setNotGoodCats] = useState([]);
+
 
     useEffect(() => {
         (async () => {
@@ -67,6 +83,7 @@ export default function App() {
         setDistanceX(0);
         setIsDragging(false);
     };
+    // スライド左に反応したときの処理
     const handleSlideLeft = () => {
         // alert("左にスライドされた")
         setNotGoodCats(prevImg => [...prevImg, catImg]);
@@ -76,69 +93,77 @@ export default function App() {
     }
 
     return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
         <>
-            <header>
+            <header
+                style={{
+                    margin: 0,
+                    textAlign:"center",
+                    padding: "10px 0 0",
+                    color: "rgb(94, 94, 93)",
+                }}
+            >
                 <h1>Cats</h1>
             </header>
             <div>
                 <main>
-                    <Box
-                        sx={{
-                            width: "450px",
-                            margin: "0 auto",
-                            border: "2px solid black",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign: "center",
-                        }}>
-                        <p>neko</p>
-                        <Box
-                            // conponent = "section"はページの構造や意味を明確にする場合は必要、見た目を整えるだけなら不要
-                            sx={{
-                                width: "400px",
-                                height: "300px",
-                                overflow: "hidden",
-                                border: "2px solid black",
-                                position: "relative",
-                                textAlign: "center",
-                            }}
-                            onMouseDown={handleMouseDown}
-                            onMouseMove={handleMouseMove}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseUp}  // マウスが外に出た時にもドラッグ終了
-                        >
+                    <Grid
+                        container
+                        spacing={1}
+                        direction="column"
+                        alignItems="center"
+                    >
+                        <Grid item>
+                            <p>neko</p>
+                        </Grid>
+                        <Grid item>
+                            <Box
+                                // conponent = "section"はページの構造や意味を明確にする場合は必要、見た目を整えるだけなら不要
+                                sx={{
+                                    width: "400px",
+                                    height: "300px",
+                                    overflow: "hidden",
+                                    border: "2px solid black",
+                                    position: "relative",
+                                    textAlign: "center",
+                                }}
 
-                            <img
-                                class="cats"
-                                src={catImg}
-                                alt="randomCats"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "contain",
-                                    transition: "transform 0.2s ease-out",
-                                    transform: `translateX(${distanceX}px)`, // スライド位置を反映
-                                }
-                                }
-
-
-                            />
-
-                        </Box>
-
-                    </Box>
-
-
-
-
-
-                    <Button variant="contained">Contained</Button>
+                                onMouseDown={handleMouseDown}
+                                onMouseMove={handleMouseMove}
+                                onMouseUp={handleMouseUp}
+                                onMouseLeave={handleMouseUp}  // マウスが外に出た時にもドラッグ終了
+                            >
+                                <img
+                                    class="cats"
+                                    src={catImg}
+                                    alt="randomCats"
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "contain",
+                                        transition: "transform 0.2s ease-out",
+                                        transform: `translateX(${distanceX}px)`, // スライド位置を反映
+                                    }
+                                    }
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained">result</Button>
+                        </Grid>
+                    </Grid>
                 </main>
             </div >
-            <footer>
+            <footer
+                style={{
+                    textAlign:"center",
+                    padding: "16px",
+                }}
+            >
                 aaaaa
             </footer>
-
         </>
+        </ThemeProvider>
     )
 }
