@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
+import * as React from 'react';
+import Button from '@mui/material/Button';
 
 export default function App() {
     //catsを使ってﾇｯｺを表示させてみる
     //画像の幅を統一させる
     const [img, setImg] = useState();
+    const [clickedSt, isClickedSt] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -29,7 +32,9 @@ export default function App() {
             </header>
             <div>
                 <main>
+                    <Button variant="contained">Contained</Button>
                     <p>neko</p>
+                    {/* サイズ、object-fitで後で調整 */}
                     <img class="cats" src={img} alt="randomCats" />
                 </main>
             </div>
