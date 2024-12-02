@@ -49,12 +49,14 @@ export default function App() {
 
     // マウスダウンでドラッグ開始
     const handleMouseDown = (e) => {
+        e.preventDefault();//ブラウザのデフォルトの動きをなくす
         setIsDragging(true);
         setStartX(e.clientX); //クリックされたときのx座標を記録
     };
 
     // マウスムーブでスライド距離を更新
     const handleMouseMove = (e) => {
+        e.preventDefault();
         if (!isDragging) return;
 
         const currentX = e.clientX;
