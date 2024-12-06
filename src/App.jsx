@@ -26,7 +26,7 @@ export default function App() {
     const [distanceX, setDistanceX] = useState(0);
     const [goodCats, setGoodCats] = useState([]);
     const [notGoodCats, setNotGoodCats] = useState([]);
-
+    const [showResult, setShowResult] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -36,7 +36,7 @@ export default function App() {
                     throw new Error(`HTTPエラー: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data[0]?.url);
+                // console.log(data[0]?.url);
                 setCatImg(data[0]?.url);
                 //?.オプショナルチェーン、
             } catch (error) {
@@ -81,7 +81,7 @@ export default function App() {
     const handleSlideRight = () => {
         // alert("画像が右にスライドされました！");
         setGoodCats(prevImg => [...prevImg, catImg]);
-        console.log("good", goodCats);
+        // console.log("good", goodCats);
         setDistanceX(0);
         setIsDragging(false);
     };
@@ -89,7 +89,7 @@ export default function App() {
     const handleSlideLeft = () => {
         // alert("左にスライドされた")
         setNotGoodCats(prevImg => [...prevImg, catImg]);
-        console.log("notGood", notGoodCats);
+        // console.log("notGood", notGoodCats);
         setDistanceX(0);
         setIsDragging(false);
     }
@@ -97,75 +97,105 @@ export default function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-        <>
-            <header
-                style={{
-                    margin: 0,
-                    textAlign:"center",
-                    padding: "10px 0 0",
-                    color: "rgb(94, 94, 93)",
-                }}
-            >
-                <h1>Cats</h1>
-            </header>
-            <div>
-                <main>
-                    <Grid
-                        container
-                        spacing={1}
-                        direction="column"
-                        alignItems="center"
-                    >
-                        <Grid item>
-                            <p>neko</p>
-                        </Grid>
-                        <Grid item>
-                            <Box
-                                // conponent = "section"はページの構造や意味を明確にする場合は必要、見た目を整えるだけなら不要
-                                sx={{
-                                    width: "400px",
-                                    height: "300px",
-                                    overflow: "hidden",
-                                    border: "2px solid black",
-                                    position: "relative",
-                                    textAlign: "center",
-                                }}
+            <>
+                <header
+                    style={{
+                        margin: 0,
+                        textAlign: "center",
+                        padding: "10px 0 0",
+                        color: "rgb(94, 94, 93)",
+                    }}
+                >
+                    <h1>Meet Cats</h1>
+                </header>
+                <div>
+                    <main style={{textAlign: "center",}}>
+                        <Grid container
+                            spacing={2}
+                            direction="column"
+                            alignItems="center"
+                        >
+                            <Grid item>
+                                遊び方
+                            </Grid>
+                            <Grid item>
+                                猫の写真を左右にスライドして、お気に入りの子を見つけよう！<br/>
+                                満足いくまで選定したら「結果をみる」をクリック！
+                            </Grid>
+                            <Grid item>
+                                ←まあまあ　好き→
+                            </Grid>
+                            <Grid item>
+                                <Box
+                                    // conponent = "section"はページの構造や意味を明確にする場合は必要、見た目を整えるだけなら不要
+                                    sx={{
+                                        width: "400px",
+                                        height: "300px",
+                                        overflow: "hidden",
+                                        border: "2px solid black",
+                                        position: "relative",
+                                        textAlign: "center",
+                                    }}
 
-                                onMouseDown={handleMouseDown}
-                                onMouseMove={handleMouseMove}
-                                onMouseUp={handleMouseUp}
-                                onMouseLeave={handleMouseUp}  // マウスが外に出た時にもドラッグ終了
-                            >
-                                <img
-                                    class="cats"
-                                    src={catImg}
-                                    alt="randomCats"
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "contain",
-                                        transition: "transform 0.2s ease-out",
-                                        transform: `translateX(${distanceX}px)`, // スライド位置を反映
-                                    }
-                                    }
-                                />
-                            </Box>
+                                    onMouseDown={handleMouseDown}
+                                    onMouseMove={handleMouseMove}
+                                    onMouseUp={handleMouseUp}
+                                    onMouseLeave={handleMouseUp}  // マウスが外に出た時にもドラッグ終了
+                                >
+                                    <img
+                                        class="cats"
+                                        src={catImg}
+                                        alt="randomCats"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain",
+                                            transition: "transform 0.2s ease-out",
+                                            transform: `translateX(${distanceX}px)`, // スライド位置を反映
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="outlined" onClick={()=>{setShowResult(true)}}>結果をみる</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="outlined" onClick={()=>{setGoodCats([]), setNotGoodCats([])}}>やりなおし</Button>
+                            </Grid>
+                            <Grid item>
+                                <Grid container spacing={2}>
+                                    {showResult && goodCats.map((img, index) => {
+                                        // console.log(img, index)
+                                        return (
+                                            <Grid item xs={3}>
+                                                <img
+                                                    key={index}
+                                                    src={img}
+                                                    alt={img}
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        objectFit: "contain",
+                                                    }}
+                                                />
+                                            </Grid>
+                                        );
+                                    })}
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button variant="contained">result</Button>
-                        </Grid>
-                    </Grid>
-                </main>
-            </div >
-            <footer
-                style={{
-                    textAlign:"center",
-                    padding: "16px",
-                }}
-            >
-                aaaaa
-            </footer>
-        </>
+                    </main>
+                </div >
+                <footer
+                    style={{
+                        textAlign: "center",
+                        padding: "8px",
+                    }}
+                >
+                    日本大学文理学部情報科学科 Webプログラミングの演習課題<br/>
+                    5423041 長谷川絢南
+                </footer>
+            </>
         </ThemeProvider>
     )
 }
